@@ -3,9 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobApplicationLibrary", "JobApplicationLibrary\JobApplicationLibrary.csproj", "{BBBE30B5-69F4-45D4-98B5-B29578774DA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobApplicationLibrary", "JobApplicationLibrary\JobApplicationLibrary.csproj", "{BBBE30B5-69F4-45D4-98B5-B29578774DA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobApplicationLibrary.UnitTest", "JobApplicationLibrary.UnitTest\JobApplicationLibrary.UnitTest.csproj", "{5D51DC80-3F6A-4964-8060-E2666978A873}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobApplicationLibrary_UnitTest", "JobApplicationLibrary.UnitTest\JobApplicationLibrary_UnitTest.csproj", "{5D51DC80-3F6A-4964-8060-E2666978A873}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BBBE30B5-69F4-45D4-98B5-B29578774DA0} = {BBBE30B5-69F4-45D4-98B5-B29578774DA0}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

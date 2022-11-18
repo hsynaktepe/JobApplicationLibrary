@@ -1,21 +1,39 @@
-namespace JobApplicationLibrary.UnitTest
+using JobApplicationLibrary;
+using JobApplicationLibrary.Models;
+
+using NUnit.Framework;
+
+
+namespace JobApplicationLibrary_UnitTest
 {
     public class ApplicationEvaluateUnitTest
     {
        
+        //UnitOfWork_Condition_ExpectedResult
 
         [Test]
-        public void Test1()
+        public void Application_WithUnderAge_TransferredToAutoRejected()
         {
-            Assert.Pass();
-            
+            //Arrange
+            var evaluator = new ApplicationEvaluator();
+            var form = new JobApplication()
+            {
+                Applicant = new Applicant()
+                {
+                    Age = 17,
+                }
+            };
+
+            //Action
+            var appResult = evaluator.Evaluate(form);
+
+            //Assert
+            //Assert.AreEqual(ApplicationResult.AutoRejected, appResult);
+            Assert.AreEqual(ApplicationResult.AutoAccepted, appResult);
+
         }
-         [Test]
-        public void Test2()
-        {
-            Assert.Fail("This test failed");
-            
-        }
+
+      
 
     }
 }
