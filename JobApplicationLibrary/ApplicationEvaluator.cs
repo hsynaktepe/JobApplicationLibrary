@@ -8,18 +8,24 @@ namespace JobApplicationLibrary
     {
         private const int minAge = 18;
         private const int autoAcceptedYearOfExperience = 15;
+        private readonly IIdentityValidator identityValidator;
         private List<string> techStackList = new() { "c#", "Rabbitmq", "microsergvice", "visual studuio" };
-        private IdentityValidator IdentityValidator;
+       
 
-        public ApplicationEvaluator()
+        public ApplicationEvaluator(IIdentityValidator identityValidator)
         {
-            IdentityValidator = new IdentityValidator();
+            this.identityValidator = identityValidator;
         }
 
         public ApplicationResult Evaluate(JobApplication form)
         {
             if (form.Applicant.Age < minAge)
                 return ApplicationResult.AutoRejected;
+
+            var validIdentity = identityValidator.IsValid(form.Applicant.IdentityNumber);
+
+            if (!validIdentity)
+                return ApplicationResult.TransferredToHR;
 
             var sr = GetTechStackSimilarityRate(form.TechStackList);
 
@@ -29,7 +35,7 @@ namespace JobApplicationLibrary
             if (sr > 75 && form.YearsOfExperience >= autoAcceptedYearOfExperience)
                 return ApplicationResult.AutoAccepted;
 
-
+            
             return ApplicationResult.AutoAccepted;
         }
 
