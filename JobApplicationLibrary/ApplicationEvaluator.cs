@@ -10,7 +10,7 @@ namespace JobApplicationLibrary
         private const int autoAcceptedYearOfExperience = 15;
         private readonly IIdentityValidator identityValidator;
         private List<string> techStackList = new() { "c#", "Rabbitmq", "microsergvice", "visual studuio" };
-       
+
 
         public ApplicationEvaluator(IIdentityValidator identityValidator)
         {
@@ -22,6 +22,8 @@ namespace JobApplicationLibrary
             if (form.Applicant.Age < minAge)
                 return ApplicationResult.AutoRejected;
 
+            //var connectionSucceed = identityValidator.CheckConnectionToRemoteServer();
+            //var validIdentity = connectionSucceed && identityValidator.IsValid(form.Applicant.IdentityNumber);
             var validIdentity = identityValidator.IsValid(form.Applicant.IdentityNumber);
 
             if (!validIdentity)
@@ -35,7 +37,7 @@ namespace JobApplicationLibrary
             if (sr > 75 && form.YearsOfExperience >= autoAcceptedYearOfExperience)
                 return ApplicationResult.AutoAccepted;
 
-            
+
             return ApplicationResult.AutoAccepted;
         }
 

@@ -8,7 +8,7 @@ namespace JobApplicationLibrary_UnitTest
 {
     public class ApplicationEvaluateUnitTest
     {
-       
+
         //UnitOfWork_Condition_ExpectedResult
 
         [Test]
@@ -33,8 +33,8 @@ namespace JobApplicationLibrary_UnitTest
 
         }
 
-       
-         [Test]
+
+        [Test]
         public void Application_WithNoStack_TransferredToAutoRejected()
         {
             //Arrange
@@ -45,8 +45,8 @@ namespace JobApplicationLibrary_UnitTest
             var form = new JobApplication()
             {
                 Applicant = new Applicant() { Age = 19, IdentityNumber = "123" },
-                TechStackList = new System.Collections.Generic.List<string>() { ""}
-                
+                TechStackList = new System.Collections.Generic.List<string>() { "" }
+
             };
 
             //Action
@@ -62,11 +62,14 @@ namespace JobApplicationLibrary_UnitTest
         public void Application_WithStackOver75P_TransferredToAutoAccepted()
         {
             //Arrange
-            var evaluator = new ApplicationEvaluator(null);
+            var mockValidator = new Mock<IIdentityValidator>();
+            mockValidator.Setup(i => i.IsValid(It.IsAny<string>())).Returns(true);
+
+            var evaluator = new ApplicationEvaluator(mockValidator.Object);
             var form = new JobApplication()
             {
-                Applicant = new Applicant() { Age = 19  },
-                TechStackList = new System.Collections.Generic.List<string>() 
+                Applicant = new Applicant() { Age = 19 },
+                TechStackList = new System.Collections.Generic.List<string>()
                 { "c#", "Rabbitmq", "microsergvice", "visual studuio" },
                 YearsOfExperience = 16
 
@@ -81,7 +84,31 @@ namespace JobApplicationLibrary_UnitTest
 
         }
 
-      
+        [Test]
+        public void Application_WithInValidIdentityNumber_TransferredToHR()
+        {
+            //Arrange
+            //var mockValidator = new Mock<IIdentityValidator>(MockBehavior.Strict);
+            //var mockValidator = new Mock<IIdentityValidator>(MockBehavior.Loose);
+            var mockValidator = new Mock<IIdentityValidator>();
+            mockValidator.Setup(i => i.IsValid(It.IsAny<string>())).Returns(false);
+
+            var evaluator = new ApplicationEvaluator(mockValidator.Object);
+            var form = new JobApplication()
+            {
+                Applicant = new Applicant() { Age = 19 }
+            };
+
+            //Action
+            var appResult = evaluator.Evaluate(form);
+
+            //Assert
+            //Assert.AreEqual(ApplicationResult.AutoRejected, appResult);
+            Assert.AreEqual(ApplicationResult.TransferredToHR, appResult);
+
+        }
+
+
 
     }
 }
