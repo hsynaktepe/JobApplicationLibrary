@@ -120,7 +120,7 @@ namespace JobApplicationLibrary_UnitTest
         {
             //Arrange
             var mockValidator = new Mock<IIdentityValidator>();
-            mockValidator.Setup(i => i.CountryDataProvider.CountryData.Country).Returns("");
+            mockValidator.Setup(i => i.CountryDataProvider.CountryData.Country).Returns("spain");
 
             //var mockValidator = new Mock<IIdentityValidator>();
             
@@ -148,7 +148,33 @@ namespace JobApplicationLibrary_UnitTest
 
         }
 
+        [Test]
+        public void Application_WithOver50_ValidationModeToDetailed()
+        {
+            //Arrange
+            var mockValidator = new Mock<IIdentityValidator>();
 
+            //tek bir property için
+            //mockValidator.SetupProperty(i => i.ValidationMode);
+            //tüm kayýtlý propertyler için
+            mockValidator.SetupAllProperties();
+            //setupallproperties altýnda olmak zorunda
+            mockValidator.Setup(i => i.CountryDataProvider.CountryData.Country).Returns("spain");
+            
+
+            var evaluator = new ApplicationEvaluator(mockValidator.Object);
+            var form = new JobApplication()
+            {
+                Applicant = new Applicant() { Age = 51 }
+            };
+
+            //Action
+            var appResult = evaluator.Evaluate(form);
+
+            //Assert
+            Assert.AreEqual(ValidationMode.Detailed, mockValidator.Object.ValidationMode);
+
+        }
 
     }
 }
